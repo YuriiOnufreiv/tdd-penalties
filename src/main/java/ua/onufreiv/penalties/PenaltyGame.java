@@ -33,6 +33,10 @@ public class PenaltyGame {
         kickOfFirstTeam = !kickOfFirstTeam;
     }
 
+    public void kick(String player, String team, boolean success) {
+        kick(success);
+    }
+
     public String score() {
         int firstTeamScore = getTeamScore(firstTeamKicks);
         int secondTeamScore = getTeamScore(secondTeamKicks);

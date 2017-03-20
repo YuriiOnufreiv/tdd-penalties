@@ -74,6 +74,11 @@ public class PenaltyGameTest {
         assertEquals(true, game.finished());
     }
 
+    @Test
+    public void kickPerformedWithPlayerAndTeamData() {
+        game.kick("Sheva", "Milan", true);
+    }
+
     private void performKicks(int kicksAmount) {
         for(int i = 0; i < kicksAmount; i++) {
             game.kick(true);
