@@ -38,6 +38,9 @@ public class PenaltyGame {
     }
 
     public boolean finished() {
+        if(firstTeamKicks.size() != secondTeamKicks.size()) {
+            return false;
+        }
         return getTeamScore(firstTeamKicks) != getTeamScore(secondTeamKicks);
     }
 }
