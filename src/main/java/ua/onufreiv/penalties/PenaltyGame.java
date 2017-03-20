@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class PenaltyGame {
     private final int TEAM_KICKS_DEFAULT_AMOUNT = 5;
+    private String firstTeam;
+    private String secondTeam;
 
     private List<Boolean> firstTeamKicks;
     private List<Boolean> secondTeamKicks;
@@ -16,11 +18,13 @@ public class PenaltyGame {
 
     private KicksHistoryService kicksHistoryService;
 
-    public PenaltyGame() {
+    public PenaltyGame(String firstTeam, String secondTeam) {
+        this.firstTeam = firstTeam;
+        this.secondTeam = secondTeam;
+
         firstTeamKicks = new ArrayList<Boolean>();
         secondTeamKicks = new ArrayList<Boolean>();
         kickOfFirstTeam = true;
-
         kicksHistoryService = new KicksHistoryService();
     }
 
@@ -38,8 +42,13 @@ public class PenaltyGame {
     }
 
     public boolean[] kick(String player, String team, boolean success) {
-        kick(success);
-        return kicksHistoryForPlayer(player);
+        if((firstTeam.equalsIgnoreCase(team) && kickOfFirstTeam) ||
+                (secondTeam.equalsIgnoreCase(team) && !kickOfFirstTeam)) {
+            kick(success);
+            return kicksHistoryForPlayer(player);
+        } else {
+            throw new KickOnWrongTurn();
+        }
     }
 
     public boolean[] kicksHistoryForPlayer(String player) {
