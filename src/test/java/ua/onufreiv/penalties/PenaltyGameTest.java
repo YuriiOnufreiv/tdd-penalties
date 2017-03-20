@@ -2,8 +2,12 @@ package ua.onufreiv.penalties;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Yurii_Onufreiv on 20-Mar-17.
@@ -75,8 +79,20 @@ public class PenaltyGameTest {
     }
 
     @Test
-    public void kickPerformedWithPlayerAndTeamData() {
-        game.kick("Sheva", "Milan", true);
+    public void playerKicksHistoryReturned() {
+        String player = "Sheva";
+        String team = "Milan";
+        boolean kickSuccess = true;
+        boolean[] expected = {true, false, true, false, true, true, true, true, true, true,};
+
+        PenaltyGame gameSpy = Mockito.spy(game);
+        when(gameSpy.kicksHistoryForPlayer(player)).thenReturn(expected);
+
+        assertEquals(expected, gameSpy.kick(player, team, kickSuccess));
+
+        InOrder inOrder = inOrder(gameSpy);
+        inOrder.verify(gameSpy).kick(kickSuccess);
+        inOrder.verify(gameSpy).kicksHistoryForPlayer(player);
     }
 
     private void performKicks(int kicksAmount) {

@@ -14,10 +14,14 @@ public class PenaltyGame {
     private List<Boolean> secondTeamKicks;
     private boolean kickOfFirstTeam;
 
+    private KicksHistoryService kicksHistoryService;
+
     public PenaltyGame() {
         firstTeamKicks = new ArrayList<Boolean>();
         secondTeamKicks = new ArrayList<Boolean>();
         kickOfFirstTeam = true;
+
+        kicksHistoryService = new KicksHistoryService();
     }
 
     private int getTeamScore(List<Boolean> firstTeamKicks) {
@@ -33,8 +37,13 @@ public class PenaltyGame {
         kickOfFirstTeam = !kickOfFirstTeam;
     }
 
-    public void kick(String player, String team, boolean success) {
+    public boolean[] kick(String player, String team, boolean success) {
         kick(success);
+        return kicksHistoryForPlayer(player);
+    }
+
+    public boolean[] kicksHistoryForPlayer(String player) {
+        return kicksHistoryService.kicksForPlayer(player);
     }
 
     public String score() {
