@@ -17,11 +17,6 @@ public class PenaltyGameTest {
     }
 
     @Test
-    public void kickPerformed() {
-        game.kick(true);
-    }
-
-    @Test
     public void initialScoreIsZeros() {
         assertEquals("0-0", game.score());
     }
@@ -30,5 +25,12 @@ public class PenaltyGameTest {
     public void scoreNotChangedAfterMissedKick() {
         game.kick(false);
         assertEquals("0-0", game.score());
+    }
+
+    @Test
+    public void scoreIsOneOneAfterTwoSuccessfulKicks() {
+        game.kick(true);
+        game.kick(true);
+        assertEquals("1-1", game.score());
     }
 }
