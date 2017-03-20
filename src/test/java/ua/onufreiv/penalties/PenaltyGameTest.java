@@ -95,7 +95,7 @@ public class PenaltyGameTest {
         inOrder.verify(gameSpy).kicksHistoryForPlayer(player);
     }
 
-    @Test(expected = KickOnWrongTurn.class)
+    @Test(expected = KickOnWrongTurnException.class)
     public void exceptionOnKickOnWrongTurn() {
         game.kick("Sheva", "FC Dynamo Kyiv", true);
     }
@@ -114,6 +114,14 @@ public class PenaltyGameTest {
 
         assertEquals(expectedScore, actualScore);
     }
+
+    @Test(expected = KickAfterFinishedException.class)
+    public void exceptionOnKickAfterFinished() {
+        performKicks(9, true);
+        game.kick(false);
+        game.kick(false);
+    }
+
 
     private void performKicks(int kicksAmount, boolean success) {
         for (int i = 0; i < kicksAmount; i++) {

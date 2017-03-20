@@ -35,6 +35,10 @@ public class PenaltyGame {
     }
 
     public void kick(boolean success) {
+        if(finished()) {
+            throw  new KickAfterFinishedException();
+        }
+
         if (kickOfFirstTeam) {
             firstTeamKicks.add(success);
         } else {
@@ -49,7 +53,7 @@ public class PenaltyGame {
             kick(success);
             return kicksHistoryForPlayer(player);
         } else {
-            throw new KickOnWrongTurn();
+            throw new KickOnWrongTurnException();
         }
     }
 
