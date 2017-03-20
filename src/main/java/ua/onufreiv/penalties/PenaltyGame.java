@@ -8,6 +8,8 @@ import java.util.List;
  * Created by Yurii_Onufreiv on 20-Mar-17.
  */
 public class PenaltyGame {
+    private final int TEAM_KICKS_DEFAULT_AMOUNT = 5;
+
     private List<Boolean> firstTeamKicks;
     private List<Boolean> secondTeamKicks;
     private boolean kickOfFirstTeam;
@@ -23,7 +25,7 @@ public class PenaltyGame {
     }
 
     public void kick(boolean success) {
-        if(kickOfFirstTeam) {
+        if (kickOfFirstTeam) {
             firstTeamKicks.add(success);
         } else {
             secondTeamKicks.add(success);
@@ -38,9 +40,20 @@ public class PenaltyGame {
     }
 
     public boolean finished() {
-        if(firstTeamKicks.size() != secondTeamKicks.size()) {
-            return false;
+        if (firstTeamKicks.size() + secondTeamKicks.size() < TEAM_KICKS_DEFAULT_AMOUNT * 2) {
+            return dueToSpecialCaseFinished();
         }
-        return getTeamScore(firstTeamKicks) != getTeamScore(secondTeamKicks);
+        return firstTeamKicks.size() == secondTeamKicks.size()
+                && getTeamScore(firstTeamKicks) != getTeamScore(secondTeamKicks);
+    }
+
+    private boolean dueToSpecialCaseFinished() {
+        int firstTeamScore = getTeamScore(firstTeamKicks);
+        int secondTeamScore = getTeamScore(secondTeamKicks);
+        if (firstTeamScore > secondTeamScore) {
+            return firstTeamScore - secondTeamScore > TEAM_KICKS_DEFAULT_AMOUNT - secondTeamKicks.size();
+        } else {
+            return secondTeamScore - firstTeamScore > TEAM_KICKS_DEFAULT_AMOUNT - firstTeamKicks.size();
+        }
     }
 }

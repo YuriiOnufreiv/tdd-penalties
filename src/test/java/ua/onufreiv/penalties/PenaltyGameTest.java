@@ -54,6 +54,26 @@ public class PenaltyGameTest {
         assertEquals(false, game.finished());
     }
 
+    @Test
+    public void gameNotFinishedForTwoZeroScore() {
+        game.kick(true);
+        game.kick(false);
+        game.kick(true);
+        game.kick(false);
+        assertEquals(false, game.finished());
+    }
+
+    @Test
+    public void gameFinishedDueToSpecialCase() {
+        game.kick(true);
+        game.kick(false);
+        game.kick(true);
+        game.kick(false);
+        game.kick(true);
+        game.kick(false);
+        assertEquals(true, game.finished());
+    }
+
     private void performKicks(int kicksAmount) {
         for(int i = 0; i < kicksAmount; i++) {
             game.kick(true);
