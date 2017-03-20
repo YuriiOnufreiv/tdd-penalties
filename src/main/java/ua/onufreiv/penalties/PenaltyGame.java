@@ -34,9 +34,19 @@ public class PenaltyGame {
         return Collections.frequency(firstTeamKicks, true);
     }
 
+    private boolean dueToSpecialCaseFinished() {
+        int firstTeamScore = getTeamScore(firstTeamKicks);
+        int secondTeamScore = getTeamScore(secondTeamKicks);
+        if (firstTeamScore > secondTeamScore) {
+            return firstTeamScore - secondTeamScore > TEAM_KICKS_DEFAULT_AMOUNT - secondTeamKicks.size();
+        } else {
+            return secondTeamScore - firstTeamScore > TEAM_KICKS_DEFAULT_AMOUNT - firstTeamKicks.size();
+        }
+    }
+
     public void kick(boolean success) {
-        if(finished()) {
-            throw  new KickAfterFinishedException();
+        if (finished()) {
+            throw new KickAfterFinishedException();
         }
 
         if (kickOfFirstTeam) {
@@ -48,7 +58,7 @@ public class PenaltyGame {
     }
 
     public boolean[] kick(String player, String team, boolean success) {
-        if((firstTeam.equalsIgnoreCase(team) && kickOfFirstTeam) ||
+        if ((firstTeam.equalsIgnoreCase(team) && kickOfFirstTeam) ||
                 (secondTeam.equalsIgnoreCase(team) && !kickOfFirstTeam)) {
             kick(success);
             return kicksHistoryForPlayer(player);
@@ -57,22 +67,14 @@ public class PenaltyGame {
         }
     }
 
-    public boolean[] kicksHistoryForPlayer(String player) {
-        return kicksHistoryService.kicksForPlayer(player);
-    }
-
-    public int missedPlayersTotalPrice(String team) {
-        return playersPriceService.getPriceForTeam(team);
-    }
-
     public String score() {
         int firstTeamScore = getTeamScore(firstTeamKicks);
         int secondTeamScore = getTeamScore(secondTeamKicks);
 
         if (firstTeamKicks.size() + secondTeamKicks.size() > 14) {
-            return "AC Milan [" + missedPlayersTotalPrice("AC Milan")
+            return firstTeam + " [" + missedPlayersTotalPrice(firstTeam)
                     + "] (" + firstTeamScore + ")-(" + secondTeamScore + ") ["
-                    + missedPlayersTotalPrice("FC Dynamo Kyiv") + "] FC Dynamo Kyiv";
+                    + missedPlayersTotalPrice(secondTeam) + "] " + secondTeam;
         }
 
         return firstTeamScore + "-" + secondTeamScore;
@@ -86,13 +88,11 @@ public class PenaltyGame {
                 && getTeamScore(firstTeamKicks) != getTeamScore(secondTeamKicks);
     }
 
-    private boolean dueToSpecialCaseFinished() {
-        int firstTeamScore = getTeamScore(firstTeamKicks);
-        int secondTeamScore = getTeamScore(secondTeamKicks);
-        if (firstTeamScore > secondTeamScore) {
-            return firstTeamScore - secondTeamScore > TEAM_KICKS_DEFAULT_AMOUNT - secondTeamKicks.size();
-        } else {
-            return secondTeamScore - firstTeamScore > TEAM_KICKS_DEFAULT_AMOUNT - firstTeamKicks.size();
-        }
+    public boolean[] kicksHistoryForPlayer(String player) {
+        return kicksHistoryService.kicksForPlayer(player);
+    }
+
+    public int missedPlayersTotalPrice(String team) {
+        return playersPriceService.getPriceForTeam(team);
     }
 }

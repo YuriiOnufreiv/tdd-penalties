@@ -14,10 +14,16 @@ import static org.mockito.Mockito.when;
  */
 public class PenaltyGameTest {
     private PenaltyGame game;
+    private String firstTeam;
+    private String secondTeam;
+    private String player;
 
     @Before
     public void setUp() {
-        game = new PenaltyGame("AC Milan", "FC Dynamo Kyiv");
+        firstTeam = "AC Milan";
+        secondTeam = "FC Dynamo Kyiv";
+        player = "Sheva";
+        game = new PenaltyGame(firstTeam, secondTeam);
     }
 
     @Test
@@ -80,15 +86,13 @@ public class PenaltyGameTest {
 
     @Test
     public void playerKicksHistoryReturned() {
-        String team = "AC Milan";
-        String player = "Sheva";
         boolean kickSuccess = true;
         boolean[] expected = {true, false, true, false, true, true, true, true, true, true};
 
         PenaltyGame gameSpy = Mockito.spy(game);
         when(gameSpy.kicksHistoryForPlayer(player)).thenReturn(expected);
 
-        assertEquals(expected, gameSpy.kick(player, team, kickSuccess));
+        assertEquals(expected, gameSpy.kick(player, firstTeam, kickSuccess));
 
         InOrder inOrder = inOrder(gameSpy);
         inOrder.verify(gameSpy).kick(kickSuccess);
@@ -97,7 +101,7 @@ public class PenaltyGameTest {
 
     @Test(expected = KickOnWrongTurnException.class)
     public void exceptionOnKickOnWrongTurn() {
-        game.kick("Sheva", "FC Dynamo Kyiv", true);
+        game.kick(player, secondTeam, true);
     }
 
     @Test
@@ -106,11 +110,11 @@ public class PenaltyGameTest {
         performKicks(2, true);
 
         PenaltyGame gameSpy = Mockito.spy(game);
-        when(gameSpy.missedPlayersTotalPrice("AC Milan")).thenReturn(500);
-        when(gameSpy.missedPlayersTotalPrice("FC Dynamo Kyiv")).thenReturn(700);
+        when(gameSpy.missedPlayersTotalPrice(firstTeam)).thenReturn(500);
+        when(gameSpy.missedPlayersTotalPrice(secondTeam)).thenReturn(700);
 
         String actualScore = gameSpy.score();
-        String expectedScore = "AC Milan [500] (1)-(1) [700] FC Dynamo Kyiv";
+        String expectedScore = firstTeam + " [500] (1)-(1) [700] " + secondTeam;
 
         assertEquals(expectedScore, actualScore);
     }
