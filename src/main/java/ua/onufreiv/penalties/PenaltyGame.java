@@ -18,6 +18,10 @@ public class PenaltyGame {
         kickOfFirstTeam = true;
     }
 
+    private int getTeamScore(List<Boolean> firstTeamKicks) {
+        return Collections.frequency(firstTeamKicks, true);
+    }
+
     public void kick(boolean success) {
         if(kickOfFirstTeam) {
             firstTeamKicks.add(success);
@@ -28,8 +32,12 @@ public class PenaltyGame {
     }
 
     public String score() {
-        int firstTeamScore = Collections.frequency(firstTeamKicks, true);
-        int secondTeamScore = Collections.frequency(secondTeamKicks, true);
+        int firstTeamScore = getTeamScore(firstTeamKicks);
+        int secondTeamScore = getTeamScore(secondTeamKicks);
         return firstTeamScore + "-" + secondTeamScore;
+    }
+
+    public boolean finished() {
+        return getTeamScore(firstTeamKicks) != getTeamScore(secondTeamKicks);
     }
 }

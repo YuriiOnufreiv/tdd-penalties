@@ -33,4 +33,12 @@ public class PenaltyGameTest {
         game.kick(true);
         assertEquals("1-1", game.score());
     }
+
+    @Test
+    public void gameNotFinishedAfterTenSuccessfulKicks() {
+        for(int i = 0; i < 10; i++) {
+            game.kick(true);
+        }
+        assertEquals(false, game.finished());
+    }
 }
