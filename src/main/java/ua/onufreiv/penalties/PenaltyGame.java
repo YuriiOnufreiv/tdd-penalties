@@ -17,6 +17,7 @@ public class PenaltyGame {
     private boolean kickOfFirstTeam;
 
     private KicksHistoryService kicksHistoryService;
+    private PlayersPriceService playersPriceService;
 
     public PenaltyGame(String firstTeam, String secondTeam) {
         this.firstTeam = firstTeam;
@@ -26,6 +27,7 @@ public class PenaltyGame {
         secondTeamKicks = new ArrayList<Boolean>();
         kickOfFirstTeam = true;
         kicksHistoryService = new KicksHistoryService();
+        playersPriceService = new PlayersPriceService();
     }
 
     private int getTeamScore(List<Boolean> firstTeamKicks) {
@@ -55,9 +57,20 @@ public class PenaltyGame {
         return kicksHistoryService.kicksForPlayer(player);
     }
 
+    public int missedPlayersTotalPrice(String team) {
+        return playersPriceService.getPriceForTeam(team);
+    }
+
     public String score() {
         int firstTeamScore = getTeamScore(firstTeamKicks);
         int secondTeamScore = getTeamScore(secondTeamKicks);
+
+        if (firstTeamKicks.size() + secondTeamKicks.size() > 14) {
+            return "AC Milan [" + missedPlayersTotalPrice("AC Milan")
+                    + "] (" + firstTeamScore + ")-(" + secondTeamScore + ") ["
+                    + missedPlayersTotalPrice("FC Dynamo Kyiv") + "] FC Dynamo Kyiv";
+        }
+
         return firstTeamScore + "-" + secondTeamScore;
     }
 

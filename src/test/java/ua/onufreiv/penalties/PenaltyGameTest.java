@@ -95,15 +95,33 @@ public class PenaltyGameTest {
         inOrder.verify(gameSpy).kicksHistoryForPlayer(player);
     }
 
-    @Test(expected=KickOnWrongTurn.class)
+    @Test(expected = KickOnWrongTurn.class)
     public void exceptionOnKickOnWrongTurn() {
-        game = new PenaltyGame("AC Milan", "FC Dynamo Kyiv");
         game.kick("Sheva", "FC Dynamo Kyiv", true);
     }
 
-    private void performKicks(int kicksAmount) {
-        for(int i = 0; i < kicksAmount; i++) {
-            game.kick(true);
+    @Test
+    public void playersPriceReturnedAfterSevenSeries() {
+        performKicks(14, false);
+        performKicks(2, true);
+
+        PenaltyGame gameSpy = Mockito.spy(game);
+        when(gameSpy.missedPlayersTotalPrice("AC Milan")).thenReturn(500);
+        when(gameSpy.missedPlayersTotalPrice("FC Dynamo Kyiv")).thenReturn(700);
+
+        String actualScore = gameSpy.score();
+        String expectedScore = "AC Milan [500] (1)-(1) [700] FC Dynamo Kyiv";
+
+        assertEquals(expectedScore, actualScore);
+    }
+
+    private void performKicks(int kicksAmount, boolean success) {
+        for (int i = 0; i < kicksAmount; i++) {
+            game.kick(success);
         }
+    }
+
+    private void performKicks(int kicksAmount) {
+        performKicks(kicksAmount, true);
     }
 }
