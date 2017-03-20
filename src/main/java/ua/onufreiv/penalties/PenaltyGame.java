@@ -7,4 +7,8 @@ public class PenaltyGame {
     public void kick(boolean success) {
 
     }
+
+    public String score() {
+        return "";
+    }
 }
