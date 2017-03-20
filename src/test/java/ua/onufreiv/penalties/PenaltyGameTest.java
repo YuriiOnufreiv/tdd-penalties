@@ -3,7 +3,7 @@ package ua.onufreiv.penalties;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Yurii_Onufreiv on 20-Mar-17.
@@ -22,7 +22,7 @@ public class PenaltyGameTest {
     }
 
     @Test
-    public void scoreIsReturned() {
-        assertNotNull(game.score());
+    public void initialScoreIsZeros() {
+        assertEquals("0-0", game.score());
     }
 }

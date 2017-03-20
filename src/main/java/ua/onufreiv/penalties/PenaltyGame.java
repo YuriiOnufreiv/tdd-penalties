@@ -9,6 +9,6 @@ public class PenaltyGame {
     }
 
     public String score() {
-        return "";
+        return "0-0";
     }
 }
