@@ -25,4 +25,10 @@ public class PenaltyGameTest {
     public void initialScoreIsZeros() {
         assertEquals("0-0", game.score());
     }
+
+    @Test
+    public void scoreNotChangedAfterMissedKick() {
+        game.kick(false);
+        assertEquals("0-0", game.score());
+    }
 }
